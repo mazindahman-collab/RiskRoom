@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RiskRoom V3 — Risk & Discipline</title>
+<style>
+:root{--bg:#0a0d12;--panel:#10151d;--panel2:#151b24;--border:#242d39;--text:#f4f7fb;--muted:#8e9aaa;--accent:#7c5cff;--accent2:#9a84ff;--good:#32d583;--warn:#f7b955;--bad:#ff6678;--shadow:0 18px 50px rgba(0,0,0,.25)}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 80% -10%,#1a1730 0,transparent 35%),var(--bg);color:var(--text);font:14px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.app{display:flex;min-height:100vh}.sidebar{width:248px;border-right:1px solid var(--border);background:rgba(12,16,22,.94);padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:10}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.6px;padding:0 10px 26px}.logo span{color:var(--accent2)}
+.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:var(--muted);padding:12px 12px;border-radius:10px;text-align:left;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{background:#191e28;color:#fff}.icon{width:20px;text-align:center}
+.side-bottom{position:absolute;bottom:18px;left:16px;right:16px}.user-mini{border:1px solid var(--border);background:var(--panel);padding:12px;border-radius:12px;display:flex;gap:10px;align-items:center}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#262039;color:#cfc5ff;font-weight:800}.user-mini small{color:var(--muted)}
+.main{margin-left:248px;width:calc(100% - 248px);padding:28px;max-width:1600px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.eyebrow{color:var(--muted);font-size:12px}.title{font-size:28px;font-weight:800;letter-spacing:-.8px;margin:4px 0}.date{color:var(--muted)}
+.actions{display:flex;gap:10px}.btn{border:1px solid var(--border);background:var(--panel2);color:#fff;padding:10px 14px;border-radius:10px}.btn.primary{background:var(--accent);border-color:var(--accent)}.btn.danger{color:#ff9aa6}.btn:hover{filter:brightness(1.1)}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.card{background:linear-gradient(180deg,rgba(21,27,36,.96),rgba(15,20,27,.96));border:1px solid var(--border);border-radius:15px;padding:18px;box-shadow:var(--shadow)}.stat-label{color:var(--muted);font-size:12px}.stat-value{font-size:26px;font-weight:800;margin:9px 0 4px}.stat-note{font-size:12px;color:var(--muted)}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.two{grid-template-columns:1.35fr .85fr}.three{grid-template-columns:repeat(3,1fr)}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.section-title{font-size:16px;font-weight:750}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--border);white-space:nowrap;text-align:left}.table th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px}.pill{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:11px;border:1px solid var(--border);background:#171d26}.pill.good{border-color:#24563e;background:#10241a}.pill.warn{border-color:#59451e;background:#241e10}.pill.bad{border-color:#5b2630;background:#241217}
+.progress{height:8px;background:#202733;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ad9aff);border-radius:inherit}.metric{display:flex;justify-content:space-between;margin:10px 0 7px}.muted{color:var(--muted)}.feed{display:grid;gap:12px}.feed-item{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}.feed-item:last-child{border-bottom:0}.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex:none}.feed-item b{font-size:13px}.feed-item p{margin:4px 0;color:var(--muted);line-height:1.45}
+.page{display:none}.page.active{display:block}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.toolbar input,.toolbar select,.field input,.field select,.field textarea{width:100%;background:#0d1219;border:1px solid var(--border);color:#fff;border-radius:10px;padding:11px 12px;outline:none}.toolbar input{max-width:260px}.field{display:grid;gap:7px;margin-bottom:14px}.field label{font-size:12px;color:var(--muted)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.show{display:flex}.modal-box{width:min(560px,100%);background:#111720;border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 30px 90px rgba(0,0,0,.5)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.close{border:0;background:transparent;color:var(--muted);font-size:22px}.empty{padding:30px;text-align:center;color:var(--muted)}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 0,#211d3b 0,transparent 42%),var(--bg)}.login-box{width:min(430px,100%);background:#111720;border:1px solid var(--border);border-radius:18px;padding:28px;box-shadow:0 30px 100px rgba(0,0,0,.45)}.login-logo{font-size:28px;font-weight:900;margin-bottom:6px}.login-logo span{color:var(--accent2)}.login-sub{color:var(--muted);margin-bottom:24px}.demo-users{display:grid;gap:8px;margin-top:15px}.demo-user{border:1px solid var(--border);background:#0d1219;color:#fff;border-radius:10px;padding:10px;text-align:left}.demo-user small{display:block;color:var(--muted);margin-top:3px}
+.mobile-nav{display:none}.danger-note{font-size:12px;color:var(--muted);line-height:1.5}.account-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.account-card h3{margin:0 0 6px}.account-meta{color:var(--muted);font-size:12px;margin-bottom:15px}.account-card .row{display:flex;justify-content:space-between;margin:8px 0}.rule{border-top:1px solid var(--border);margin:13px 0}.admin-only{display:none}.admin-only.visible{display:block}
+@media(max-width:1050px){.stats{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.account-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.sidebar{display:none}.main{margin:0;width:100%;padding:18px 14px 88px}.topbar{align-items:flex-start}.title{font-size:23px}.mobile-nav{position:fixed;display:flex;bottom:0;left:0;right:0;background:#0e131a;border-top:1px solid var(--border);z-index:20;justify-content:space-around;padding:7px}.mobile-nav button{background:transparent;border:0;color:var(--muted);font-size:10px;padding:6px}.mobile-nav button.active{color:#fff}.stats{grid-template-columns:1fr 1fr}.three,.account-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.actions .btn{padding:9px 10px}.table th,.table td{padding:10px 8px}}
+</style>
+</head>
+<body>
+<div id="loginView" class="login">
+  <div class="login-box">
+    <div class="login-logo">Risk<span>Room</span></div>
+    <div class="login-sub">Risk. Discipline. Accountability.<br><span style="font-size:12px">A private room for serious traders.</span></div>
+    <div class="field"><label>Email</label><input id="loginEmail" placeholder="trader@riskroom.app"></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="••••••••"></div>
+    <button class="btn primary" style="width:100%" onclick="login()">Sign in</button>
+    <div class="demo-users">
+      <button class="demo-user" onclick="demoLogin('Mazin')">Mazin <small>Trader • demo</small></button>
+      <button class="demo-user" onclick="demoLogin('Adnane')">Adnane <small>Trader • demo</small></button>
+      <button class="demo-user" onclick="demoLogin('Anas')">Anas <small>Admin • demo</small></button>
+    </div>
+  </div>
+</div>
+
+<div id="appView" class="app" style="display:none">
+  <aside class="sidebar">
+    <div class="logo">Risk<span>Room</span></div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard" onclick="showPage('dashboard',this)"><span class="icon">⌂</span> Dashboard</button>
+      <button data-page="accounts" onclick="showPage('accounts',this)"><span class="icon">▣</span> My Accounts</button>
+      <button data-page="trade" onclick="openTrade()"><span class="icon">＋</span> Add Trade</button>
+      <button data-page="daily" onclick="showPage('daily',this)"><span class="icon">◫</span> Daily Tracker</button>
+      <button data-page="history" onclick="showPage('history',this)"><span class="icon">◷</span> Trade History</button>
+      <button data-page="group" onclick="showPage('group',this)"><span class="icon">◎</span> Group Dashboard</button>
+      <button data-page="activity" onclick="showPage('activity',this)"><span class="icon">◌</span> Activity Feed</button>
+      <button id="adminNav" data-page="admin" class="admin-only" onclick="showPage('admin',this)"><span class="icon">⚙</span> Admin</button>
+    </nav>
+    <div class="side-bottom"><div class="user-mini"><div class="avatar" id="sideAvatar">M</div><div><b id="sideName">Mazin</b><br><small id="sideRole">Trader</small></div></div><button class="btn" style="width:100%;margin-top:9px" onclick="logout()">Log out</button></div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div><div class="eyebrow">RISKROOM / <span id="crumb">DASHBOARD</span></div><div class="title" id="pageTitle">Good evening, Mazin</div><div class="date" id="todayLabel"></div></div>
+      <div class="actions"><button class="btn" onclick="showPage('group')">Group View</button><button class="btn primary" onclick="openTrade()">＋ Add Trade</button></div>
+    </div>
+
+    <section id="page-dashboard" class="page active">
+      <div class="grid stats">
+        <div class="card"><div class="stat-label">TODAY'S TRADES</div><div class="stat-value" id="sTrades">0</div><div class="stat-note">Across your active accounts</div></div>
+        <div class="card"><div class="stat-label">TODAY'S RISK</div><div class="stat-value" id="sRisk">0.00%</div><div class="stat-note">Total risk committed today</div></div>
+        <div class="card"><div class="stat-label">REMAINING RISK</div><div class="stat-value good" id="sRemaining">0.00%</div><div class="stat-note">Based on account daily limits</div></div>
+        <div class="card"><div class="stat-label">DISCIPLINE</div><div class="stat-value" id="sDiscipline">—</div><div class="stat-note">Risk-limit adherence</div></div>
+      </div>
+      <div class="grid two">
+        <div class="card"><div class="section-head"><div class="section-title">Today's Risk</div><span class="pill" id="riskPill">Within limits</span></div><div id="riskAccounts"></div></div>
+        <div class="card"><div class="section-head"><div class="section-title">Recent Trades</div><button class="btn" onclick="showPage('history')">View all</button></div><div id="recentTrades"></div></div>
+      </div>
+      <div class="card" style="margin-top:16px"><div class="section-head"><div class="section-title">Discipline Snapshot</div><span class="muted">No P&L metrics by design</span></div><div class="grid three"><div><div class="metric"><span class="muted">Trades today</span><b id="dTrades">0</b></div><div class="progress"><i id="tradeProgress" style="width:0%"></i></div></div><div><div class="metric"><span class="muted">Risk used</span><b id="dRisk">0%</b></div><div class="progress"><i id="riskProgress" style="width:0%"></i></div></div><div><div class="metric"><span class="muted">Active accounts</span><b id="dAccounts">0</b></div><div class="progress"><i style="width:100%"></i></div></div></div></div>
+    </section>
+
+    <section id="page-accounts" class="page">
+      <div class="section-head"><div><div class="section-title">My Accounts</div><div class="muted">Track prop firm phases and risk rules.</div></div><button class="btn primary" onclick="openAccount()">＋ Add Account</button></div>
+      <div id="accountsGrid" class="grid account-grid"></div>
+    </section>
+
+    <section id="page-daily" class="page">
+      <div class="section-head"><div><div class="section-title">Daily Risk Tracker</div><div class="muted">Review risk usage and trade count day by day.</div></div><input id="dailyDate" type="date" class="btn" onchange="renderDaily()"></div>
+      <div class="grid stats"><div class="card"><div class="stat-label">TRADES</div><div class="stat-value" id="dayTrades">0</div></div><div class="card"><div class="stat-label">TOTAL RISK</div><div class="stat-value" id="dayRisk">0.00%</div></div><div class="card"><div class="stat-label">RISK REMAINING</div><div class="stat-value good" id="dayRemaining">0.00%</div></div><div class="card"><div class="stat-label">STATUS</div><div class="stat-value good" id="dayStatus">ON PLAN</div></div></div>
+      <div class="card"><div class="section-head"><div class="section-title">Account Breakdown</div></div><div id="dailyAccounts"></div></div>
+    </section>
+
+    <section id="page-history" class="page">
+      <div class="toolbar"><button class="btn" onclick="exportHistory()">Export CSV</button><input id="historySearch" placeholder="Search prop firm, account, note..." oninput="renderHistory()"><select id="historyPhase" onchange="renderHistory()"><option value="">All phases</option><option>Phase 1</option><option>Phase 2</option><option>Funded</option></select></div>
+      <div class="card"><div class="section-head"><div class="section-title">Trade History</div><span class="muted" id="historyCount"></span></div><div class="table-wrap"><table class="table"><thead><tr><th>Date / Time</th><th>Account</th><th>Phase</th><th>Risk / trade</th><th>Trades</th><th>Total risk</th><th>Status</th><th>Notes</th></tr></thead><tbody id="historyBody"></tbody></table></div></div>
+    </section>
+
+    <section id="page-group" class="page">
+      <div class="grid stats">
+        <div class="card"><div class="stat-label">GROUP TRADES TODAY</div><div class="stat-value" id="gTrades">0</div><div class="stat-note">All members</div></div>
+        <div class="card"><div class="stat-label">GROUP RISK TODAY</div><div class="stat-value" id="gRisk">0.00%</div><div class="stat-note">Committed risk</div></div>
+        <div class="card"><div class="stat-label">ACTIVE TRADERS</div><div class="stat-value" id="gMembers">0</div><div class="stat-note">Members with activity</div></div>
+        <div class="card"><div class="stat-label">ROOM STATUS</div><div class="stat-value good" id="gStatus">CALM</div><div class="stat-note">Risk-room discipline</div></div>
+      </div>
+      <div class="card"><div class="section-head"><div class="section-title">Today's Group Activity</div><span class="muted">Visible to all members</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Trader</th><th>Account / Phase</th><th>Trades</th><th>Risk / trade</th><th>Total daily risk</th><th>Last activity</th></tr></thead><tbody id="groupBody"></tbody></table></div></div>
+    </section>
+
+    <section id="page-activity" class="page">
+      <div class="card"><div class="section-head"><div class="section-title">Activity Feed</div><span class="muted">Latest discipline events</span></div><div id="activityFeed" class="feed"></div></div>
+    </section>
+
+    <section id="page-admin" class="page">
+      <div class="grid two">
+        <div class="card"><div class="section-head"><div class="section-title">Members</div><span class="pill good">Admin</span></div><div id="membersList"></div></div>
+        <div class="card"><div class="section-head"><div class="section-title">Room Rules</div><button class="btn primary" onclick="saveRules()">Save</button></div><div class="field"><label>Default daily risk limit (%)</label><input id="defaultRisk" type="number" step=".1" min="0" max="100"></div><div class="field"><label>Max trades per day</label><input id="maxTrades" type="number" min="1"></div><div class="danger-note">Rules are discipline controls only. RiskRoom intentionally excludes P&L, equity, win rate and profit-factor metrics.</div></div>
+      </div>
+    </section>
+  </main>
+  <div class="mobile-nav">
+    <button class="active" onclick="showPage('dashboard',this)">⌂<br>Home</button>
+    <button onclick="showPage('accounts',this)">▣<br>Accounts</button>
+    <button onclick="openTrade()">＋<br>Trade</button>
+    <button onclick="showPage('group',this)">◎<br>Group</button>
+    <button onclick="showPage('history',this)">◷<br>History</button>
+  </div>
+</div>
+
+<div id="tradeModal" class="modal"><div class="modal-box"><div class="modal-head"><div><b>Add Trade</b><div class="muted">Log risk and discipline — nothing about P&L.</div></div><button class="close" onclick="closeModal('tradeModal')">×</button></div>
+<form onsubmit="addTrade(event)">
+<div class="form-grid"><div class="field"><label>Account</label><select id="tradeAccount" required></select></div><div class="field"><label>Date / Time</label><input id="tradeDate" type="datetime-local" required></div></div>
+<div class="form-grid"><div class="field"><label>Risk % per trade</label><input id="tradeRisk" type="number" step=".01" min="0" max="100" placeholder="0.50" required></div><div class="field"><label>Number of trades</label><input id="tradeCount" type="number" min="1" max="50" value="1" required></div></div>
+<div class="form-grid"><div class="field"><label>Status</label><select id="tradeStatus"><option>Executed</option><option>Missed Rule</option><option>Cancelled</option></select></div><div class="field"><label>Notes (optional)</label><input id="tradeNotes" placeholder="e.g. followed plan"></div></div>
+<button class="btn primary" style="width:100%">Save Trade</button>
+</form></div></div>
+
+
+<div id="editAccountModal" class="modal"><div class="modal-box"><div class="modal-head"><b>Edit Account</b><button class="close" onclick="closeModal('editAccountModal')">×</button></div>
+<form onsubmit="updateAccount(event)">
+<input id="editAccId" type="hidden">
+<div class="form-grid"><div class="field"><label>Prop Firm</label><input id="editAccFirm" required></div><div class="field"><label>Account Size</label><input id="editAccSize" type="number" required></div></div>
+<div class="form-grid"><div class="field"><label>Phase</label><select id="editAccPhase"><option>Phase 1</option><option>Phase 2</option><option>Funded</option></select></div><div class="field"><label>Daily Risk Limit %</label><input id="editAccDaily" type="number" step=".1" required></div></div>
+<div class="field"><label>Max Drawdown / Rule</label><input id="editAccRule"></div>
+<div style="display:flex;gap:8px"><button type="submit" class="btn primary" style="flex:1">Save changes</button><button type="button" class="btn danger" onclick="deleteAccount()">Delete</button></div>
+</form></div></div>
+<div id="accountModal" class="modal"><div class="modal-box"><div class="modal-head"><b>Add Account</b><button class="close" onclick="closeModal('accountModal')">×</button></div>
+<form onsubmit="addAccount(event)">
+<div class="form-grid"><div class="field"><label>Prop Firm</label><input id="accFirm" placeholder="Alpha Capital" required></div><div class="field"><label>Account Size</label><input id="accSize" type="number" placeholder="100000" required></div></div>
+<div class="form-grid"><div class="field"><label>Phase</label><select id="accPhase"><option>Phase 1</option><option>Phase 2</option><option>Funded</option></select></div><div class="field"><label>Daily Risk Limit %</label><input id="accDaily" type="number" step=".1" value="2" required></div></div>
+<div class="field"><label>Max Drawdown / Rule (optional)</label><input id="accRule" placeholder="e.g. 10% max drawdown"></div>
+<button class="btn primary" style="width:100%">Create Account</button>
+</form></div></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxGjN3Rumzgbr83KHEoLLiLbSU9yWe4S4",
+  authDomain: "riskroom-895cf.firebaseapp.com",
+  projectId: "riskroom-895cf",
+  storageBucket: "riskroom-895cf.firebasestorage.app",
+  messagingSenderId: "179860064476",
+  appId: "1:179860064476:web:de2b53371cdb18641a0c19",
+  measurementId: "G-Y3B1VRG4G7"
+};
+const fbApp = initializeApp(firebaseConfig);
+const fsDb = getFirestore(fbApp);
+const stateRef = doc(fsDb, "riskroom", "state");
+
+const seed={
+ rules:{defaultRisk:2,maxTrades:5},
+ users:[
+  {id:"u1",name:"Mazin",role:"Trader",email:"mazin@riskroom.app"},
+  {id:"u2",name:"Adnane",role:"Trader",email:"adnane@riskroom.app"},
+  {id:"u3",name:"Anas",role:"Admin",email:"anas@riskroom.app"}
+ ],
+ accounts:[
+  {id:"a1",user:"u1",firm:"Alpha Capital",size:100000,phase:"Phase 1",daily:2,rule:"10% max drawdown"},
+  {id:"a2",user:"u1",firm:"GOAT Funded Trader",size:50000,phase:"Funded",daily:2,rule:"8% max drawdown"},
+  {id:"a3",user:"u2",firm:"The Funded Trader",size:100000,phase:"Phase 2",daily:2,rule:"10% max drawdown"},
+  {id:"a4",user:"u3",firm:"Alpha Capital",size:50000,phase:"Funded",daily:2,rule:"8% max drawdown"}
+ ],
+ trades:[
+  {id:"t1",user:"u1",account:"a1",dt:"2026-09-06T09:10",risk:.5,count:1,status:"Executed",notes:"CRT + MSS confirmation"},
+  {id:"t2",user:"u1",account:"a2",dt:"2026-09-06T10:45",risk:.25,count:1,status:"Executed",notes:"Clean rejection"},
+  {id:"t3",user:"u2",account:"a3",dt:"2026-09-06T09:55",risk:.5,count:1,status:"Executed",notes:"Plan followed"},
+  {id:"t4",user:"u3",account:"a4",dt:"2026-09-06T11:20",risk:.5,count:2,status:"Executed",notes:"Two planned entries"}
+ ]};
+let db=null;
+let current=JSON.parse(localStorage.getItem("riskroom_user")||"null")||null;
+let started=false;
+const $=id=>document.getElementById(id);
+async function save(){
+  try{ await setDoc(stateRef, db); }
+  catch(e){ console.error("Firestore save error:",e); alert("Ma t7ffdatch chi 7aja — chek connexion internet."); }
+}
+onSnapshot(stateRef, async (snap)=>{
+  if(snap.exists()){ db = snap.data(); }
+  else { db = seed; try{ await setDoc(stateRef, seed); }catch(e){ console.error(e); } }
+  if(current){
+    if(!started){ start(); }
+    else { renderAll(); }
+  }
+}, (err)=>{ console.error("Firestore listen error:", err); });
+function today(){return new Date().toISOString().slice(0,10)}
+function fmtDate(x){return new Date(x).toLocaleString([], {month:"short",day:"2-digit",hour:"2-digit",minute:"2-digit"})}
+function me(){return db.users.find(u=>u.id===current.id)}
+function myAccounts(){return db.accounts.filter(a=>a.user===current.id)}
+function myTrades(){return db.trades.filter(t=>t.user===current.id)}
+function acc(id){return db.accounts.find(a=>a.id===id)}
+function user(id){return db.users.find(u=>u.id===id)}
+function total(t){return t.risk*t.count}
+function login(){let e=$("loginEmail").value.trim();let u=db.users.find(x=>x.email===e)||db.users[0];current={id:u.id};localStorage.setItem("riskroom_user",JSON.stringify(current));start()}
+function demoLogin(name){let u=db.users.find(x=>x.name===name);current={id:u.id};localStorage.setItem("riskroom_user",JSON.stringify(current));start()}
+function logout(){localStorage.removeItem("riskroom_user");location.reload()}
+function start(){if(!current)return; if(!db){setTimeout(start,200);return;} started=true; $("loginView").style.display="none";$("appView").style.display="flex";let u=me();$("sideName").textContent=u.name;$("sideRole").textContent=u.role;$("sideAvatar").textContent=u.name[0];$("adminNav").classList.toggle("visible",u.role==="Admin");$("todayLabel").textContent=new Date().toLocaleDateString([], {weekday:"long",month:"long",day:"numeric",year:"numeric"});renderAll()}
+function showPage(name,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$("page-"+name).classList.add("active");document.querySelectorAll(".nav button,.mobile-nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");let b=[...document.querySelectorAll(`[data-page="${name}"]`)].find(x=>x.closest(".sidebar"))||[...document.querySelectorAll(`[data-page="${name}"]`)].find(x=>x.closest(".mobile-nav"));if(b)b.classList.add("active");$("crumb").textContent=name.toUpperCase();let titles={dashboard:`Good evening, ${me().name}`,accounts:"My Accounts",history:"Trade History",daily:"Daily Risk Tracker",group:"Group Dashboard",activity:"Activity Feed",admin:"Admin Controls"};$("pageTitle").textContent=titles[name]||"RiskRoom"}
+function renderAll(){renderDashboard();renderAccounts();renderDaily();renderHistory();renderGroup();renderActivity();renderAdmin()}
+function renderDashboard(){
+ let ts=myTrades().filter(t=>t.dt.slice(0,10)===today()), risk=ts.reduce((s,t)=>s+total(t),0), limits=myAccounts().reduce((s,a)=>s+a.daily,0), rem=Math.max(0,limits-risk);
+ $("sTrades").textContent=ts.reduce((s,t)=>s+t.count,0);$("sRisk").textContent=risk.toFixed(2)+"%";$("sRemaining").textContent=rem.toFixed(2)+"%";$("sDiscipline").textContent=risk<=limits?"ON PLAN":"CHECK";
+ $("riskPill").textContent=risk<=limits?"Within limits":"Limit exceeded";$("riskPill").className="pill "+(risk<=limits?"good":"bad");
+ $("dTrades").textContent=ts.reduce((s,t)=>s+t.count,0);$("dRisk").textContent=risk.toFixed(2)+"%";$("dAccounts").textContent=myAccounts().length;
+ $("tradeProgress").style.width=Math.min(100,(ts.reduce((s,t)=>s+t.count,0)/Math.max(1,db.rules.maxTrades))*100)+"%";$("riskProgress").style.width=Math.min(100,(risk/Math.max(1,limits))*100)+"%";
+ $("riskAccounts").innerHTML=myAccounts().map(a=>{let ar=ts.filter(t=>t.account===a.id).reduce((s,t)=>s+total(t),0);let p=Math.min(100,ar/a.daily*100);return `<div style="margin-bottom:15px"><div class="metric"><span><b>${a.firm}</b> <span class="muted">· ${a.phase}</span></span><span>${ar.toFixed(2)}% / ${a.daily.toFixed(2)}%</span></div><div class="progress"><i style="width:${p}%"></i></div></div>`}).join("")||`<div class="empty">No accounts yet.</div>`;
+ let recent=myTrades().sort((a,b)=>b.dt.localeCompare(a.dt)).slice(0,5);$("recentTrades").innerHTML=recent.map(t=>`<div class="feed-item"><div class="dot"></div><div><b>${acc(t.account).firm}</b> · ${total(t).toFixed(2)}% risk<br><span class="muted">${fmtDate(t.dt)} · ${t.count} trade${t.count>1?"s":""}</span></div></div>`).join("")||`<div class="empty">No trades logged.</div>`;
+}
+function renderAccounts(){$("accountsGrid").innerHTML=myAccounts().map(a=>`<div class="card account-card"><div class="section-head"><span class="pill">${a.phase}</span><span class="muted">#${a.id.toUpperCase()}</span></div><h3>${a.firm}</h3><div class="account-meta">$${Number(a.size).toLocaleString()} account</div><div class="row"><span class="muted">Daily risk limit</span><b>${a.daily}%</b></div><div class="row"><span class="muted">Rule</span><span>${a.rule||"—"}</span></div><div class="rule"></div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="openTrade('${a.id}')">＋ Log Trade</button><button class="btn" onclick="editAccount('${a.id}')">Edit</button></div></div>`).join("")||`<div class="card empty">Add your first prop-firm account to start tracking discipline.</div>`}
+function renderDaily(){
+ let d=$("dailyDate"); if(d&&!d.value)d.value=today(); let date=d?.value||today(); let ts=myTrades().filter(t=>t.dt.slice(0,10)===date); let risk=ts.reduce((s,t)=>s+total(t),0), limits=myAccounts().reduce((s,a)=>s+a.daily,0), rem=Math.max(0,limits-risk);
+ $("dayTrades").textContent=ts.reduce((s,t)=>s+t.count,0); $("dayRisk").textContent=risk.toFixed(2)+"%"; $("dayRemaining").textContent=rem.toFixed(2)+"%"; $("dayStatus").textContent=risk<=limits?"ON PLAN":"CHECK"; $("dayStatus").className="stat-value "+(risk<=limits?"good":"bad");
+ $("dailyAccounts").innerHTML=myAccounts().map(a=>{let ar=ts.filter(t=>t.account===a.id).reduce((s,t)=>s+total(t),0), n=ts.filter(t=>t.account===a.id).reduce((s,t)=>s+t.count,0),p=Math.min(100,ar/a.daily*100);return `<div style="margin-bottom:18px"><div class="metric"><span><b>${a.firm}</b> <span class="muted">· ${a.phase}</span></span><span>${n} trades · ${ar.toFixed(2)}% / ${a.daily.toFixed(2)}%</span></div><div class="progress"><i style="width:${p}%"></i></div></div>`}).join("")||`<div class="empty">No accounts.</div>`;
+}
+
+function exportHistory(){
+  let rows=myTrades().sort((a,b)=>b.dt.localeCompare(a.dt));
+  let csv=[["Date / Time","Account","Phase","Risk %","Trades","Total Risk %","Status","Notes"],...rows.map(t=>[t.dt,acc(t.account).firm,acc(t.account).phase,t.risk,t.count,total(t),t.status,t.notes||""])]
+    .map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");
+  let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="riskroom-trade-history.csv";a.click();URL.revokeObjectURL(url);
+}
+function renderHistory(){let q=($("historySearch")?.value||"").toLowerCase(), ph=$("historyPhase")?.value||"";let rows=myTrades().filter(t=>{let a=acc(t.account);return (!q||(a.firm+" "+t.notes+" "+a.id).toLowerCase().includes(q))&&(!ph||a.phase===ph)}).sort((a,b)=>b.dt.localeCompare(a.dt));$("historyCount").textContent=rows.length+" records";$("historyBody").innerHTML=rows.map(t=>`<tr><td>${fmtDate(t.dt)}</td><td>${acc(t.account).firm}</td><td>${acc(t.account).phase}</td><td>${t.risk.toFixed(2)}%</td><td>${t.count}</td><td><b>${total(t).toFixed(2)}%</b></td><td><span class="pill ${t.status==="Executed"?"good":t.status==="Missed Rule"?"bad":"warn"}">${t.status}</span></td><td class="muted">${t.notes||"—"}</td></tr>`).join("")||`<tr><td colspan="8" class="empty">No matching trades.</td></tr>`}
+function renderGroup(){let ts=db.trades.filter(t=>t.dt.slice(0,10)===today());$("gTrades").textContent=ts.reduce((s,t)=>s+t.count,0);$("gRisk").textContent=ts.reduce((s,t)=>s+total(t),0).toFixed(2)+"%";$("gMembers").textContent=new Set(ts.map(t=>t.user)).size;$("gStatus").textContent=ts.some(t=>t.status==="Missed Rule")?"CHECK":"CALM";
+ let by={};ts.forEach(t=>{by[t.user]??={trades:0,risk:0,last:t.dt,items:[]};by[t.user].trades+=t.count;by[t.user].risk+=total(t);if(t.dt>by[t.user].last)by[t.user].last=t.dt;by[t.user].items.push(t)});
+ $("groupBody").innerHTML=Object.entries(by).map(([uid,x])=>{let latest=x.items.sort((a,b)=>b.dt.localeCompare(a.dt))[0],a=acc(latest.account);return `<tr><td><b>${user(uid).name}</b></td><td>${a.firm} <span class="muted">· ${a.phase}</span></td><td>${x.trades}</td><td>${latest.risk.toFixed(2)}%</td><td><b>${x.risk.toFixed(2)}%</b></td><td>${fmtDate(x.last)}</td></tr>`}).join("")||`<tr><td colspan="6" class="empty">No group activity today.</td></tr>`}
+function renderActivity(){let rows=db.trades.slice().sort((a,b)=>b.dt.localeCompare(a.dt)).slice(0,12);$("activityFeed").innerHTML=rows.map(t=>`<div class="feed-item"><div class="dot"></div><div><b>${user(t.user).name}</b> logged <b>${t.count} trade${t.count>1?"s":""}</b> on ${acc(t.account).firm} · <b>${total(t).toFixed(2)}%</b> total risk.<p>${fmtDate(t.dt)} · ${t.status}${t.notes?" · "+t.notes:""}</p></div></div>`).join("")}
+function renderAdmin(){if(me().role!=="Admin")return;$("defaultRisk").value=db.rules.defaultRisk;$("maxTrades").value=db.rules.maxTrades;$("membersList").innerHTML=db.users.map(u=>`<div class="feed-item"><div class="avatar">${u.name[0]}</div><div><b>${u.name}</b><p>${u.email} · ${u.role}</p></div></div>`).join("")}
+function openTrade(accountId){$("tradeAccount").innerHTML=myAccounts().map(a=>`<option value="${a.id}" ${a.id===accountId?"selected":""}>${a.firm} · ${a.phase}</option>`).join("");let now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());$("tradeDate").value=now.toISOString().slice(0,16);$("tradeRisk").value="0.50";$("tradeCount").value=1;$("tradeNotes").value="";$("tradeModal").classList.add("show")}
+function addTrade(e){e.preventDefault();let t={id:"t"+Date.now(),user:current.id,account:$("tradeAccount").value,dt:$("tradeDate").value,risk:Number($("tradeRisk").value),count:Number($("tradeCount").value),status:$("tradeStatus").value,notes:$("tradeNotes").value.trim()};db.trades.push(t);save();closeModal("tradeModal");renderAll();showPage("dashboard")}
+function openAccount(){$("accountModal").classList.add("show")}
+function editAccount(id){let a=acc(id); $("accFirm").value=a.firm;$("accSize").value=a.size;$("accPhase").value=a.phase;$("accDaily").value=a.daily;$("accRule").value=a.rule||"";$("accountModal").classList.add("show");let f=document.querySelector("#accountModal form");f.dataset.edit=id;$("accountModal").querySelector(".modal-head b").textContent="Edit Account"}
+
+function editAccount(id){
+  let a=acc(id); if(!a)return;
+  $("editAccId").value=a.id;$("editAccFirm").value=a.firm;$("editAccSize").value=a.size;
+  $("editAccPhase").value=a.phase;$("editAccDaily").value=a.daily;$("editAccRule").value=a.rule||"";
+  $("editAccountModal").classList.add("show");
+}
+function updateAccount(e){
+  e.preventDefault();let a=acc($("editAccId").value);if(!a)return;
+  a.firm=$("editAccFirm").value.trim();a.size=Number($("editAccSize").value);
+  a.phase=$("editAccPhase").value;a.daily=Number($("editAccDaily").value);a.rule=$("editAccRule").value.trim();
+  save();closeModal("editAccountModal");renderAll();
+}
+function deleteAccount(){
+  let id=$("editAccId").value;
+  if(!confirm("Delete this account? Existing trades will also be removed."))return;
+  db.accounts=db.accounts.filter(a=>a.id!==id);db.trades=db.trades.filter(t=>t.account!==id);
+  save();closeModal("editAccountModal");renderAll();
+}
+function addAccount(e){e.preventDefault();let f=e.target, edit=f.dataset.edit; let data={user:current.id,firm:$("accFirm").value.trim(),size:Number($("accSize").value),phase:$("accPhase").value,daily:Number($("accDaily").value),rule:$("accRule").value.trim()}; if(edit){let a=acc(edit); if(a&&a.user===current.id)Object.assign(a,data); delete f.dataset.edit;} else db.accounts.push({id:"a"+Date.now(),...data});save();closeModal("accountModal");f.reset();$("accountModal").querySelector(".modal-head b").textContent="Add Account";renderAll()}
+function saveRules(){db.rules.defaultRisk=Number($("defaultRisk").value);db.rules.maxTrades=Number($("maxTrades").value);save();renderAll();alert("Room rules saved.")}
+function closeModal(id){$(id).classList.remove("show")}
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+
+// Expose functions used by inline HTML event handlers (needed since this script is a module)
+Object.assign(window, {
+  login, demoLogin, logout, showPage, openTrade, addTrade, openAccount,
+  editAccount, updateAccount, deleteAccount, addAccount, saveRules,
+  closeModal, exportHistory, renderDaily, renderHistory
+});
+</script>
+</body>
+</html>
